@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pookie Valentine</title>
+
+  <style>
+    :root{
+      --bg1:#ffd6e7;
+      --bg2:#ffeef6;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --pink:#ff2d7a;
+      --pink2:#ff6aa2;
+      --shadow: 0 18px 50px rgba(0,0,0,0.18);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top, var(--bg2), var(--bg1));
+      overflow:hidden;
+    }
+
+    .card{
+      width:min(420px, 92vw);
+      background:var(--card);
+      border-radius:18px;
+      padding:28px 22px;
+      text-align:center;
+      box-shadow:var(--shadow);
+      position:relative;
+    }
+
+    .kitty{
+      width:84px;
+      height:84px;
+      margin:0 auto 10px auto;
+      border-radius:50%;
+      background: #f7b36b;
+      position:relative;
+    }
+    .kitty:before, .kitty:after{
+      content:"";
+      position:absolute;
+      top:-10px;
+      width:26px; height:26px;
+      background:#f7b36b;
+      border-radius:6px;
+      transform:rotate(20deg);
+    }
+    .kitty:before{ left:8px; }
+    .kitty:after{ right:8px; transform:rotate(-20deg); }
+
+    .heart{
+      position:absolute;
+      right:-6px;
+      top:6px;
+      width:22px;
+      height:22px;
+      background: var(--pink);
+      transform:rotate(45deg);
+      border-radius:6px;
+    }
+    .heart:before, .heart:after{
+      content:"";
+      position:absolute;
+      width:22px;
+      height:22px;
+      background: var(--pink);
+      border-radius:50%;
+    }
+    .heart:before{ left:-11px; top:0; }
+    .heart:after{ left:0; top:-11px; }
+
+    h1{
+      font-size:22px;
+      margin:10px 0 8px 0;
+      color:var(--text);
+      font-weight:800;
+      letter-spacing:0.2px;
+    }
+    p{
+      margin:0 0 18px 0;
+      color:#444;
+      font-size:14px;
+    }
+
+    .buttons{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      margin-top:10px;
+      position:relative;
+      height:56px;
+    }
+
+    button{
+      border:none;
+      padding:12px 18px;
+      border-radius:999px;
+      font-size:16px;
+      cursor:pointer;
+      transition: transform 0.05s ease;
+      user-select:none;
+    }
+    button:active{ transform: scale(0.98); }
+
+    .yes{
+      background: var(--pink);
+      color:white;
+      font-weight:700;
+      min-width:110px;
+      box-shadow: 0 12px 26px rgba(255,45,122,0.35);
+    }
+
+    .no{
+      background:#e9e9e9;
+      color:#222;
+      font-weight:650;
+      min-width:110px;
+      position:absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .hint{
+      margin-top:12px;
+      font-size:12px;
+      color:#666;
+    }
+
+    /* Success screen */
+    .success{
+      display:none;
+    }
+
+    .success h2{
+      margin:10px 0 6px 0;
+      font-size:22px;
+      color:var(--text);
+      font-weight:900;
+    }
+    .success .msg{
+      font-size:15px;
+      color:#333;
+      line-height:1.35;
+      margin-top:8px;
+    }
+
+    .mini{
+      margin-top:14px;
+      font-size:12px;
+      color:#666;
+    }
+
+    /* Floating hearts */
+    .float-heart{
+      position:fixed;
+      bottom:-30px;
+      width:14px;
+      height:14px;
+      background: var(--pink2);
+      transform: rotate(45deg);
+      opacity:0.9;
+      border-radius:4px;
+      animation: rise 2.8s linear forwards;
+      pointer-events:none;
+    }
+    .float-heart:before, .float-heart:after{
+      content:"";
+      position:absolute;
+      width:14px;
+      height:14px;
+      background: var(--pink2);
+      border-radius:50%;
+    }
+    .float-heart:before{ left:-7px; top:0; }
+    .float-heart:after{ left:0; top:-7px; }
+
+    @keyframes rise{
+      0%{ transform: translateY(0) rotate(45deg); }
+      100%{ transform: translateY(-115vh) rotate(45deg); opacity:0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card" id="card">
+    <div id="askScreen">
+      <div class="kitty">
+        <div class="heart"></div>
+      </div>
+
+      <h1>Pookie, will you be my Valentine?</h1>
+      <p>One small question. One big yes.</p>
+
+      <div class="buttons" id="btnArea">
+        <button class="yes" id="yesBtn">Yes</button>
+        <button class="no" id="noBtn">No</button>
+      </div>
+
+      <div class="hint">Tip: the “No” button is a little shy.</div>
+    </div>
+
+    <div class="success" id="successScreen">
+      <div class="kitty">
+        <div class="heart"></div>
+      </div>
+      <h2>Yayyyyy 💖</h2>
+      <div class="msg">
+        Pookie, you just made my whole day.<br/>
+        Happy Valentine’s Day ❤️
+      </div>
+      <div class="mini">Screenshot this and send it back to me 🙂</div>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const btnArea = document.getElementById("btnArea");
+    const yesBtn = document.getElementById("yesBtn");
+    const askScreen = document.getElementById("askScreen");
+    const successScreen = document.getElementById("successScreen");
+
+    function moveNoButton() {
+      const area = btnArea.getBoundingClientRect();
+      const btn = noBtn.getBoundingClientRect();
+
+      const maxX = area.width - btn.width;
+      const maxY = area.height - btn.height;
+
+      const x = Math.random() * Math.max(0, maxX);
+      const y = Math.random() * Math.max(0, maxY);
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    // Start somewhere not annoying
+    noBtn.style.left = "140px";
+    noBtn.style.top = "0px";
+
+    // On hover or tap, run away
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+
+    function spawnHeart() {
+      const h = document.createElement("div");
+      h.className = "float-heart";
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.animationDuration = (2.2 + Math.random() * 1.6) + "s";
+      h.style.transform = "rotate(45deg) scale(" + (0.8 + Math.random() * 1.2) + ")";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 4000);
+    }
+
+    yesBtn.addEventListener("click", () => {
+      askScreen.style.display = "none";
+      successScreen.style.display = "block";
+
+      for (let i = 0; i < 24; i++) {
+        setTimeout(spawnHeart, i * 80);
+      }
+    });
+
+    // Make sure No button has a random start position once loaded
+    window.addEventListener("load", () => {
+      moveNoButton();
+    });
+  </script>
+</body>
+</html>
