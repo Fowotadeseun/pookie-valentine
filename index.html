@@ -27,13 +27,14 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: radial-gradient(circle at top, var(--bg2), var(--bg1));
       overflow:hidden;
+      padding: 18px 0;
     }
 
     .card{
-      width:min(420px, 92vw);
+      width:min(520px, 92vw);
       background:var(--card);
       border-radius:18px;
-      padding:28px 22px;
+      padding:26px 20px;
       text-align:center;
       box-shadow:var(--shadow);
       position:relative;
@@ -137,22 +138,51 @@
       color:#666;
     }
 
-    /* Success screen */
     .success{
       display:none;
     }
 
     .success h2{
-      margin:10px 0 6px 0;
-      font-size:22px;
+      margin:10px 0 8px 0;
+      font-size:24px;
       color:var(--text);
       font-weight:900;
     }
-    .success .msg{
+
+    .sweet{
+      margin: 0 auto;
+      max-width: 440px;
       font-size:15px;
-      color:#333;
-      line-height:1.35;
-      margin-top:8px;
+      color:#2b2b2b;
+      line-height:1.45;
+      background: #fff3f8;
+      border: 1px solid rgba(255,45,122,0.15);
+      padding: 12px 12px;
+      border-radius: 14px;
+    }
+
+    .memeWrap{
+      margin-top: 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .meme{
+      width:100%;
+      max-width: 420px;
+      margin: 0 auto;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow: 0 14px 35px rgba(0,0,0,0.16);
+      border: 1px solid rgba(0,0,0,0.06);
+      background:#fff;
+    }
+
+    .meme img{
+      width:100%;
+      display:block;
+      height:auto;
     }
 
     .mini{
@@ -161,7 +191,6 @@
       color:#666;
     }
 
-    /* Floating hearts */
     .float-heart{
       position:fixed;
       bottom:-30px;
@@ -185,9 +214,25 @@
     .float-heart:before{ left:-7px; top:0; }
     .float-heart:after{ left:0; top:-7px; }
 
+    .confetti{
+      position:fixed;
+      top:-10px;
+      width:8px;
+      height:12px;
+      opacity:0.9;
+      border-radius:2px;
+      animation: fall 2.2s linear forwards;
+      pointer-events:none;
+    }
+
     @keyframes rise{
       0%{ transform: translateY(0) rotate(45deg); }
       100%{ transform: translateY(-115vh) rotate(45deg); opacity:0; }
+    }
+
+    @keyframes fall{
+      0%{ transform: translateY(0) rotate(0deg); }
+      100%{ transform: translateY(110vh) rotate(360deg); opacity:0; }
     }
   </style>
 </head>
@@ -214,12 +259,24 @@
       <div class="kitty">
         <div class="heart"></div>
       </div>
-      <h2>Yayyyyy 💖</h2>
-      <div class="msg">
-        Thanks, Pookie, we should try that Italian place again.<br/>
-        Happy Valentine’s Day in advance my love ❤️
+
+      <h2>YAY! 🎉</h2>
+
+      <div class="sweet">
+        Thanks Pookie, we should try that Italian place again<br>
+        Happy valentine day yay in advance
       </div>
-      <div class="mini">Screenshot this and send it back to me 🙂</div>
+
+      <div class="memeWrap">
+        <div class="meme">
+          <img src="meme1.jpg" alt="Meme 1">
+        </div>
+        <div class="meme">
+          <img src="meme2.jpeg" alt="Meme 2">
+        </div>
+      </div>
+
+      <div class="mini">Send me a screenshot after you click Yes 🙂</div>
     </div>
   </div>
 
@@ -244,11 +301,9 @@
       noBtn.style.top = y + "px";
     }
 
-    // Start somewhere not annoying
     noBtn.style.left = "140px";
     noBtn.style.top = "0px";
 
-    // On hover or tap, run away
     noBtn.addEventListener("mouseenter", moveNoButton);
     noBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
@@ -265,16 +320,24 @@
       setTimeout(() => h.remove(), 4000);
     }
 
+    function spawnConfetti() {
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.background = Math.random() > 0.5 ? "#ff2d7a" : "#ffb703";
+      c.style.animationDuration = (1.6 + Math.random() * 1.2) + "s";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3500);
+    }
+
     yesBtn.addEventListener("click", () => {
       askScreen.style.display = "none";
       successScreen.style.display = "block";
 
-      for (let i = 0; i < 24; i++) {
-        setTimeout(spawnHeart, i * 80);
-      }
+      for (let i = 0; i < 26; i++) setTimeout(spawnHeart, i * 80);
+      for (let i = 0; i < 40; i++) setTimeout(spawnConfetti, i * 55);
     });
 
-    // Make sure No button has a random start position once loaded
     window.addEventListener("load", () => {
       moveNoButton();
     });
