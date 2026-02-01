@@ -20,24 +20,25 @@
 
     body{
       margin:0;
-      height:100vh;
+      min-height:100vh;
       display:flex;
-      align-items:center;
       justify-content:center;
+      align-items:flex-start;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: radial-gradient(circle at top, var(--bg2), var(--bg1));
-      overflow:hidden;
-      padding: 18px 0;
+      overflow:auto;
+      padding: 20px 0;
     }
 
     .card{
-      width:min(520px, 92vw);
+      width:min(560px, 92vw);
       background:var(--card);
       border-radius:18px;
       padding:26px 20px;
       text-align:center;
       box-shadow:var(--shadow);
       position:relative;
+      margin: 10px 0 30px 0;
     }
 
     .kitty{
@@ -143,15 +144,15 @@
     }
 
     .success h2{
-      margin:10px 0 8px 0;
-      font-size:24px;
+      margin:10px 0 10px 0;
+      font-size:26px;
       color:var(--text);
       font-weight:900;
     }
 
     .sweet{
-      margin: 0 auto;
-      max-width: 440px;
+      margin: 0 auto 14px auto;
+      max-width: 480px;
       font-size:15px;
       color:#2b2b2b;
       line-height:1.45;
@@ -161,8 +162,25 @@
       border-radius: 14px;
     }
 
+    .heroMeme{
+      width:100%;
+      max-width: 520px;
+      margin: 14px auto 16px auto;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow: 0 16px 42px rgba(0,0,0,0.18);
+      border: 1px solid rgba(0,0,0,0.06);
+      background:#fff;
+    }
+
+    .heroMeme img{
+      width:100%;
+      display:block;
+      height:auto;
+    }
+
     .memeWrap{
-      margin-top: 14px;
+      margin-top: 10px;
       display:flex;
       flex-direction:column;
       gap: 12px;
@@ -170,11 +188,11 @@
 
     .meme{
       width:100%;
-      max-width: 420px;
+      max-width: 520px;
       margin: 0 auto;
       border-radius:14px;
       overflow:hidden;
-      box-shadow: 0 14px 35px rgba(0,0,0,0.16);
+      box-shadow: 0 14px 35px rgba(0,0,0,0.14);
       border: 1px solid rgba(0,0,0,0.06);
       background:#fff;
     }
@@ -267,12 +285,15 @@
         Happy valentine day yay in advance
       </div>
 
+      <!-- BIG main meme (your SpongeBob) -->
+      <div class="heroMeme">
+        <img src="meme2.jpg" alt="OMG YAY meme">
+      </div>
+
+      <!-- Second meme below (optional) -->
       <div class="memeWrap">
         <div class="meme">
           <img src="meme1.jpg" alt="Meme 1">
-        </div>
-        <div class="meme">
-          <img src="meme2.jpeg" alt="Meme 2">
         </div>
       </div>
 
@@ -336,6 +357,9 @@
 
       for (let i = 0; i < 26; i++) setTimeout(spawnHeart, i * 80);
       for (let i = 0; i < 40; i++) setTimeout(spawnConfetti, i * 55);
+
+      // jump to top so she sees the message + big meme instantly
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
     window.addEventListener("load", () => {
